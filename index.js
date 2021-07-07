@@ -1,6 +1,8 @@
 const express = require('express');
-
 const app = express();
+
+// middleware for allwing parsing of json object in request
+app.use(express.json());
 
 const courses = [
     { id: 1, name: 'course1' },
@@ -27,6 +29,20 @@ app.get('/api/courses/:id', (req, res) => {
 app.get('/api/courses/:id', (req, res) => {
     res.send(req.query);
 })
+
+// post new course
+app.post('/api/courses', (req, res) => {
+    if (!req.body.name || req.body.name.length < 3) {
+        // 400 bad request
+        res.status(400).send('Name is required and length must be more than 3 characters.');
+    }
+    const course = {
+        id: courses.length + 1,
+        name: req.body.name
+    };
+    courses.push(course);
+    res.send(course);
+});
 
 
 // PORT from environment variable or default to 3000

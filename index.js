@@ -14,7 +14,11 @@ app.get('/api/courses/:id', (req, res) => {
     res.send(req.params.id);
 })
 
-// PORT
+app.get('/api/posts/:year/:month', (req, res) => {
+    res.send(req.params);
+})
+
+// PORT from environment variable or default to 3000
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));

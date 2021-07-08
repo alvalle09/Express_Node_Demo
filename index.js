@@ -42,7 +42,7 @@ app.post('/api/courses', (req, res) => {
 
     if (result.error) {
         // 400 bad request
-        res.status(400).send(result.error);
+        res.status(400).send(result.error.details[0].message);
         return;
     }
     const course = {
@@ -51,6 +51,7 @@ app.post('/api/courses', (req, res) => {
     };
     courses.push(course);
     res.send(course);
+    console.log(courses);
 });
 
 

@@ -54,6 +54,39 @@ app.post('/api/courses', (req, res) => {
     console.log(courses);
 });
 
+app.put('/api/courses/:id', (req, res) => {
+    // look up course    
+    // If course doesn't exist, return 404
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) res.status(404).send('The course with given id not found');  
+
+    const result = validateCouse(req.body);
+
+    if (result.error) {
+        // 400 bad request
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+
+    // Update course
+    courses.name = req.body.name;
+    
+    // Return updated course 
+    res.send(course);
+
+    //if not ex
+});
+
+function validateCourse(course) {
+
+    // If invalid, return 404 - Bad request
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+
+    return Joi.validate(course, schema);
+
+}
 
 // PORT from environment variable or default to 3000
 const port = process.env.PORT || 3000;

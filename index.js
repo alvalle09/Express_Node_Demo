@@ -33,18 +33,13 @@ app.get('/api/courses/:id', (req, res) => {
 
 // post new course
 app.post('/api/courses', (req, res) => {
-    const schema = {
-        name: Joi.string().min(3).required()
-    };
-
-    const result = Joi.validate(req.body, schema);
-    console.log(result);
-
-    if (result.error) {
+    const { error } = validateCourse(req.body);
+    if (error) {
         // 400 bad request
-        res.status(400).send(result.error.details[0].message);
+        res.status(400).send(error.details[0].message);
         return;
     }
+
     const course = {
         id: courses.length + 1,
         name: req.body.name
@@ -60,17 +55,17 @@ app.put('/api/courses/:id', (req, res) => {
     const course = courses.find(c => c.id === parseInt(req.params.id));
     if (!course) res.status(404).send('The course with given id not found');  
 
-    const result = validateCouse(req.body);
-
-    if (result.error) {
+    // use onject destructuring to get only property needed
+    const { error } = validateCourse(req.body);
+    if (error) {
         // 400 bad request
-        res.status(400).send(result.error.details[0].message);
+        res.status(400).send(error.details[0].message);
         return;
     }
 
     // Update course
-    courses.name = req.body.name;
-    
+    course.name = req.body.name;
+    console.log(courses);
     // Return updated course 
     res.send(course);
 

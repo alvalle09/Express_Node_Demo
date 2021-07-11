@@ -68,9 +68,22 @@ app.put('/api/courses/:id', (req, res) => {
     console.log(courses);
     // Return updated course 
     res.send(course);
-
-    //if not ex
 });
+
+app.delete('/api/courses/:id', (req, res) => {
+    // Look up the course
+    // Doesn't exist, return 404
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) res.status(404).send('The course with given id not found');  
+
+    // Otherwise Delete it
+    const index = courses.indexOf(course);
+    courses.splice(index, 1);
+
+    // Return the deleted course
+    res.send(course);
+
+} )
 
 function validateCourse(course) {
 

@@ -23,6 +23,7 @@ app.get('/api/courses', (req, res) => {
 app.get('/api/courses/:id', (req, res) => {
     const course = courses.find(c => c.id === parseInt(req.params.id));
     if (!course) return res.status(404).send(`Courese id ${req.params.id} not found`);  
+
     res.send(course);
     res.send(req.params.id);
 })
@@ -49,7 +50,7 @@ app.put('/api/courses/:id', (req, res) => {
     // look up course    
     // If course doesn't exist, return 404
     const course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) return res.status(404).send('The course with given id not found');  
+    if (!course) return res.status(404).send(`Courese id ${req.params.id} not found`);  
 
     // use onject destructuring to get only property needed
     const { error } = validateCourse(req.body);
@@ -70,7 +71,7 @@ app.delete('/api/courses/:id', (req, res) => {
     // Look up the course
     // Doesn't exist, return 404
     const course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) res.status(404).send('The course with given id not found');  
+    if (!course) return res.status(404).send(`Courese id ${req.params.id} not found`);  
 
     // Otherwise Delete it
     const index = courses.indexOf(course);
@@ -78,8 +79,7 @@ app.delete('/api/courses/:id', (req, res) => {
 
     // Return the deleted course
     res.send(course);
-
-} )
+})
 
 function validateCourse(course) {
 
